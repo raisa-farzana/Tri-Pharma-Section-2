@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .mbr-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .mbr-slider-container {
+            position: relative;
+            overflow: hidden;
+            padding: 30px 0 50px;
+        }
+
+        .mbr-slider {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .mbr-slide {
+            padding: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .mbr-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+        }
+
+        .mbr-card {
+            height: 400px;
+            background: #00C1D7;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 193, 215, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .mbr-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 193, 215, 0.3);
+        }
+
+        .mbr-card-header {
+            padding: 30px 20px 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mbr-icon-wrapper {
+            width: 90px;
+            height: 90px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mbr-card:hover .mbr-icon-wrapper {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        .mbr-icon {
+            fill: #FFFFFF;
+        }
+
+        .mbr-title {
+            font-size: 24px !important;
+            font-weight: 700;
+            color: white !important;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .mbr-card-body {
+            padding: 0 20px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .mbr-quote {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            font-style: italic;
+            color: white;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        span.mbr-attribution {
+            display: none;
+        }
+
+        .mbr-decoration {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.25), transparent 70%);
+            border-radius: 0 0 0 120px;
+            pointer-events: none;
+        }
+
+        .mbr-decoration:before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .mbr-decoration:after {
+            content: '';
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        .mbr-slider-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 -20px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .mbr-slider-btn {
+            width: 60px;
+            height: 60px;
+            background-color: #00A0B0;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 10px 20px rgba(0, 193, 215, 0.2);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            margin: 0 10px;
+        }
+
+        .mbr-slider-btn:hover {
+            background-color: #008a97;
+            transform: scale(1.1);
+        }
+
+        .mbr-slider-btn:focus {
+            outline: none;
+        }
+
+        .mbr-slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .mbr-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #cbd5e0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mbr-dot.mbr-active {
+            background-color: #00A0B0;
+            transform: scale(1.3);
+        }
+
+        /* Responsive styles */
+        @media (min-width: 1366px) {
+            .mbr-slide {
+                min-width: 25%;
+                /* 4 cards on large screens */
+            }
+        }
+
+        @media (min-width: 1080px) and (max-width: 1365px) {
+            .mbr-slide {
+                min-width: 33.333%;
+                /* 3 cards on medium-large screens */
+            }
+        }
+
+        @media (min-width: 767px) and (max-width: 1079px) {
+            .mbr-slide {
+                min-width: 50%;
+                /* 2 cards on medium screens */
+            }
+        }
+
+        @media (max-width: 766px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .mbr-slide {
+                min-width: 85%;
+                /* 1 card (with peek) on mobile */
+            }
+
+            .mbr-card {
+                height: 380px;
+            }
+
+            .mbr-icon-wrapper {
+                width: 80px;
+                height: 80px;
+            }
+
+            .mbr-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .mbr-title {
+                font-size: 22px;
+            }
+
+            .mbr-slider-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mbr-slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .mbr-card {
+                height: 350px;
+            }
+
+            .mbr-card-header {
+                padding: 25px 15px;
+            }
+
+            .mbr-card-body {
+                padding: 0 15px 25px;
+            }
+
+            .mbr-quote {
+                padding: 20px;
+                font-size: 15px;
+            }
+        }
+    </style>
+    <div class="mbr-container">
+        <div class="mbr-slider-container">
+            <div class="mbr-slider" id="mbr-slider">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <div class="mbr-slider-controls">
+                <button class="mbr-slider-btn mbr-prev" id="mbr-prev">←</button>
+                <button class="mbr-slider-btn mbr-next" id="mbr-next">→</button>
+            </div>
+        </div>
+
+        <div class="mbr-slider-dots" id="mbr-dots">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Card data with full testimonials and links
+        const cardData = [{
+                title: "Hospitals",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-5.svg">',
+                quote: "Not-for-profit hospitals are healthcare organizations that don't distribute profits to owners,.............",
+                attribution: " ",
+                link: "https://pcubeapps.com/partners-in-patient-care#Hospitals"
+            },        
+            {
+                title: "Oncology Clinics",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/icon-2-1.svg">',
+                quote: "Oncology clinics are healthcare facilities specializing in the diagnosis.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Oncology"
+            },
+            {
+                title: "Large Surgery Centers",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/icon-1-1.svg">',
+                quote: "Large surgery centers, also known as ambulatory surgery centers (ASCs), are.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Large-Surgery"
+            },
+            {
+                title: "Long Term Acute....",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-3.svg">',
+                quote: "A Long-Term Acute Care (LTAC) hospital is a specialized hospital that provides acute.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Long-Term"
+            },
+            {
+                title: "Infusion Pharmacy",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-2.svg">',
+                quote: "Infusion pharmacies are specialized pharmacies that focus on preparing and administering.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Infusion-Pharmacy"
+            },
+            {
+                title: "Infusion Centers",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-5.svg">',
+                quote: "Infusion centers are outpatient clinics that specialize in administering infusion therapy.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Infusion-Centers"
+            },
+            {
+                title: "Specialty Pharmacy",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-1.svg">',
+                quote: "Specialty pharmacies focus on medications for rare, complex, and often chronic conditions.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Specialty-Pharmacy"
+            },
+            {
+                title: "Closed Door Pharmacy",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Vector.svg">',
+                quote: "A pharmacy that provides pharmaceutical care specifically to a defined group of patients.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Closed-Door"
+            },
+            {
+                title: "Correctional Pharmacy",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/icon-3.svg">',
+                quote: "Correctional pharmacy is a specialized area of pharmacy practice that provides.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Correctional-Pharmacy"
+            },
+            {
+                title: "VA Medical Center",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-1.svg">',
+                quote: "A VA medical center, or hospital, provides comprehensive healthcare services to eligib..............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#VA-Medical"
+            },
+            {
+                title: "DOD Medical Facility",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/icon-3.svg">',
+                quote: "A DoD (Department of Defense) medical center is a military hospital or clinic providing.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#DOD-Medical"
+            },
+            {
+                title: "Research Facility",
+                icon: '<img src="https://pcubeapps.com/wp-content/uploads/2025/05/Layer_1-3.svg">',
+                quote: "A research facility is a dedicated space for conducting research and experimentation.............",
+                attribution: "",
+                link: "https://pcubeapps.com/partners-in-patient-care#Research-Facility"
+            }
+        ];
+
+        // Improved carousel functionality with true infinite loop
+        document.addEventListener('DOMContentLoaded', function () {
+            const sliderElement = document.getElementById('mbr-slider');
+            const dotsContainer = document.getElementById('mbr-dots');
+            const prevBtn = document.getElementById('mbr-prev');
+            const nextBtn = document.getElementById('mbr-next');
+
+            let slidesPerView = getSlidesPerView();
+            let currentIndex = 0;
+            let totalOriginalSlides = cardData.length;
+            let isTransitioning = false;
+            let autoplayTimer;
+
+            // Determine slides per view based on screen width
+            function getSlidesPerView() {
+                if (window.innerWidth >= 1366) {
+                    return 4;
+                } else if (window.innerWidth >= 1080) {
+                    return 3;
+                } else if (window.innerWidth >= 767) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+
+            // Clone slides for infinite loop effect
+            function getClonedData() {
+                // Create a copy of the original data with clones at both ends
+                // This creates the illusion of an infinite carousel
+                const clonedBefore = [...cardData].slice(-slidesPerView);
+                const clonedAfter = [...cardData].slice(0, slidesPerView);
+                return [...clonedBefore, ...cardData, ...clonedAfter];
+            }
+
+            // Initialize slider
+            function initSlider() {
+                // Clear existing content
+                sliderElement.innerHTML = '';
+                dotsContainer.innerHTML = '';
+                
+                const clonedData = getClonedData();
+                
+                // Create slides including clones
+                clonedData.forEach((card, index) => {
+                    const slide = document.createElement('div');
+                    slide.classList.add('mbr-slide');
+                    slide.setAttribute('data-index', index);
+
+                    slide.innerHTML = `
+                        <a href="${card.link}" class="mbr-card-link">
+                            <div class="mbr-card">
+                                <div class="mbr-decoration"></div>
+                                <div class="mbr-card-header">
+                                    <div class="mbr-icon-wrapper">
+                                        <div class="mbr-icon">${card.icon}</div>
+                                    </div>
+                                    <h3 class="mbr-title">${card.title}</h3>
+                                </div>
+                                <div class="mbr-card-body">
+                                    <p class="mbr-quote">${card.quote} <span class="mbr-attribution">- ${card.attribution}</span></p>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+
+                    sliderElement.appendChild(slide);
+                });
+
+                // Set slides width based on slides per view
+                const slides = document.querySelectorAll('.mbr-slide');
+                slides.forEach(slide => {
+                    slide.style.minWidth = `${100 / slidesPerView}%`;
+                });
+
+                // Create pagination dots for original slides only
+                for (let i = 0; i < totalOriginalSlides; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('mbr-dot');
+                    if (i === 0) dot.classList.add('mbr-active');
+
+                    dot.addEventListener('click', () => {
+                        goToSlide(i);
+                        resetAutoplay();
+                    });
+
+                    dotsContainer.appendChild(dot);
+                }
+
+                // Set initial position to first real slide (after clones)
+                currentIndex = slidesPerView;
+                updateSliderPosition(false);
+            }
+
+            // Go to specific slide with transition
+            function goToSlide(index) {
+                // Add slidesPerView to account for the cloned slides at the beginning
+                currentIndex = index + slidesPerView;
+                updateSliderPosition(true);
+                updateActiveDot();
+            }
+
+            // Handle the infinite loop transition
+            function handleInfiniteLoop() {
+                if (isTransitioning) return;
+                
+                // If we've gone past the end (into the cloned area)
+                if (currentIndex >= totalOriginalSlides + slidesPerView) {
+                    isTransitioning = true;
+                    // Wait for transition to finish then jump to the real first slide
+                    setTimeout(() => {
+                        sliderElement.style.transition = 'none';
+                        currentIndex = slidesPerView;
+                        updateSliderPosition(false);
+                        
+                        // Re-enable transition after the jump
+                        setTimeout(() => {
+                            sliderElement.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                            isTransitioning = false;
+                        }, 50);
+                    }, 500);
+                }
+                
+                // If we've gone before the beginning (into the cloned area)
+                else if (currentIndex < slidesPerView) {
+                    isTransitioning = true;
+                    // Wait for transition to finish then jump to the real last slide
+                    setTimeout(() => {
+                        sliderElement.style.transition = 'none';
+                        currentIndex = totalOriginalSlides + slidesPerView - 1;
+                        updateSliderPosition(false);
+                        
+                        // Re-enable transition after the jump
+                        setTimeout(() => {
+                            sliderElement.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                            isTransitioning = false;
+                        }, 50);
+                    }, 500);
+                }
+            }
+
+            // Update slider position based on current index
+            function updateSliderPosition(withTransition = true) {
+                if (withTransition) {
+                    sliderElement.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                } else {
+                    sliderElement.style.transition = 'none';
+                }
+                
+                const slideWidth = 100 / slidesPerView;
+                const translateX = -currentIndex * slideWidth;
+                sliderElement.style.transform = `translateX(${translateX}%)`;
+                
+                if (withTransition) {
+                    handleInfiniteLoop();
+                }
+            }
+
+            // Update active dot
+            function updateActiveDot() {
+                // Calculate the real index (accounting for the cloned slides)
+                let realIndex = (currentIndex - slidesPerView) % totalOriginalSlides;
+                if (realIndex < 0) realIndex = totalOriginalSlides + realIndex;
+                
+                const dots = document.querySelectorAll('.mbr-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('mbr-active', index === realIndex);
+                });
+            }
+
+            // Start autoplay
+            function startAutoplay() {
+                autoplayTimer = setInterval(() => {
+                    if (!isTransitioning) {
+                        currentIndex++;
+                        updateSliderPosition(true);
+                        updateActiveDot();
+                    }
+                }, 5000);
+            }
+
+            // Reset autoplay
+            function resetAutoplay() {
+                clearInterval(autoplayTimer);
+                startAutoplay();
+            }
+
+            // Event listeners
+            prevBtn.addEventListener('click', () => {
+                if (!isTransitioning) {
+                    currentIndex--;
+                    updateSliderPosition(true);
+                    updateActiveDot();
+                    resetAutoplay();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (!isTransitioning) {
+                    currentIndex++;
+                    updateSliderPosition(true);
+                    updateActiveDot();
+                    resetAutoplay();
+                }
+            });
+
+            // Handle transition end
+            sliderElement.addEventListener('transitionend', () => {
+                updateActiveDot();
+            });
+
+            // Pause autoplay on hover
+            sliderElement.addEventListener('mouseenter', () => {
+                clearInterval(autoplayTimer);
+            });
+
+            sliderElement.addEventListener('mouseleave', () => {
+                startAutoplay();
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                const newSlidesPerView = getSlidesPerView();
+
+                if (newSlidesPerView !== slidesPerView) {
+                    slidesPerView = newSlidesPerView;
+                    
+                    // Save the current real index before re-initializing
+                    let realIndex = (currentIndex - slidesPerView) % totalOriginalSlides;
+                    if (realIndex < 0) realIndex = totalOriginalSlides + realIndex;
+                    
+                    // Re-initialize slider with new settings
+                    initSlider();
+                    
+                    // Go to the same real slide after reinitializing
+                    goToSlide(realIndex);
+                }
+            });
+
+            // Initialize slider
+            initSlider();
+            startAutoplay();
+        });
+    </script>
+</body>
+</html>
