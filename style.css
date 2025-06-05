@@ -1,0 +1,289 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .mbr-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+        }
+        .mbr-slider-container {
+            position: relative;
+            overflow: hidden;
+            padding: 30px 0 50px;
+        }
+
+        .mbr-slider {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .mbr-slide {
+            padding: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .mbr-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            height: 100%;
+        }
+
+        .mbr-card {
+            height: 400px;
+            background: #00C1D7;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 193, 215, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .mbr-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 193, 215, 0.3);
+        }
+
+        .mbr-card-header {
+            padding: 30px 20px 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .mbr-icon-wrapper {
+            width: 90px;
+            height: 90px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mbr-card:hover .mbr-icon-wrapper {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        .mbr-icon {
+            fill: #FFFFFF;
+        }
+
+        .mbr-title {
+            font-size: 24px !important;
+            font-weight: 700;
+            color: white !important;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .mbr-card-body {
+            padding: 0 20px 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .mbr-quote {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            font-style: italic;
+            color: white;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        span.mbr-attribution {
+            display: none;
+        }
+
+        .mbr-decoration {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.25), transparent 70%);
+            border-radius: 0 0 0 120px;
+            pointer-events: none;
+        }
+
+        .mbr-decoration:before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+        }
+
+        .mbr-decoration:after {
+            content: '';
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        .mbr-slider-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 -20px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .mbr-slider-btn {
+            width: 60px;
+            height: 60px;
+            background-color: #00A0B0;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 10px 20px rgba(0, 193, 215, 0.2);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            margin: 0 10px;
+        }
+
+        .mbr-slider-btn:hover {
+            background-color: #008a97;
+            transform: scale(1.1);
+        }
+
+        .mbr-slider-btn:focus {
+            outline: none;
+        }
+
+        .mbr-slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .mbr-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #cbd5e0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mbr-dot.mbr-active {
+            background-color: #00A0B0;
+            transform: scale(1.3);
+        }
+
+        /* Responsive styles */
+        @media (min-width: 1366px) {
+            .mbr-slide {
+                min-width: 25%;
+                /* 4 cards on large screens */
+            }
+        }
+
+        @media (min-width: 1080px) and (max-width: 1365px) {
+            .mbr-slide {
+                min-width: 33.333%;
+                /* 3 cards on medium-large screens */
+            }
+        }
+
+        @media (min-width: 767px) and (max-width: 1079px) {
+            .mbr-slide {
+                min-width: 50%;
+                /* 2 cards on medium screens */
+            }
+        }
+
+        @media (max-width: 766px) {
+            h1 {
+                font-size: 28px;
+            }
+
+            .mbr-slide {
+                min-width: 85%;
+                /* 1 card (with peek) on mobile */
+            }
+
+            .mbr-card {
+                height: 380px;
+            }
+
+            .mbr-icon-wrapper {
+                width: 80px;
+                height: 80px;
+            }
+
+            .mbr-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .mbr-title {
+                font-size: 22px;
+            }
+
+            .mbr-slider-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mbr-slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .mbr-card {
+                height: 350px;
+            }
+
+            .mbr-card-header {
+                padding: 25px 15px;
+            }
+
+            .mbr-card-body {
+                padding: 0 15px 25px;
+            }
+
+            .mbr-quote {
+                padding: 20px;
+                font-size: 15px;
+            }
+        }
